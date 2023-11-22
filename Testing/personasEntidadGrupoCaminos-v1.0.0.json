@@ -1,0 +1,1799 @@
+{
+    "swagger": "2.0",
+    "host": "github",
+    "schemes": [
+        "https"
+    ],
+    "securityDefinitions": {
+        "default": {
+            "type": "none",
+            "tokenUrl": "",
+            "flow": "application",
+            "scopes": {}
+        }
+    },
+    "basePath": "/test/osl/v1.0.0",
+    "info": {
+        "title": "TESTING OSL SWAGGER",
+        "version": "v1.0.0",
+        "description": "Api  de personas en modo Entidad"
+    },
+    "tags": [],
+    "paths": {
+        "/fisica/{idInternoPe}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "summary": "Gestión de personas ampliada: alta, modificación y consulta  de personas físicas.",
+                "description": "",
+                "tags": [],
+                "x-auth-type": "Application & Application User",
+                "x-throttling-tier": "Unlimited",
+                "parameters": [
+                    {
+                        "name": "CODCanal",
+                        "in": "header",
+                        "required": false,
+                        "type": "string",
+                        "description": "Campo que identifica al código del canal",
+                        "x-example": "string"
+                    },
+                    {
+                        "name": "X-SignatureName",
+                        "in": "header",
+                        "required": true,
+                        "type": "string",
+                        "description": "Nombre de la clave usada para la firma",
+                        "x-example": "string"
+                    },
+                    {
+                        "name": "X-Signature",
+                        "in": "header",
+                        "required": true,
+                        "type": "string",
+                        "description": "La firma de la petición a enviar",
+                        "x-example": "string"
+                    },
+                    {
+                        "name": "X-CorrelationId",
+                        "in": "header",
+                        "required": false,
+                        "type": "string",
+                        "description": "Id de correlación",
+                        "x-example": "string"
+                    },
+                    {
+                        "name": "codigoEntidad",
+                        "in": "query",
+                        "required": true,
+                        "description": "El Codigo NRBE de Entidad representa el numero de Registro del Banco de España que tiene la Entidad.",
+                        "type": "string",
+                        "maxLength": 4,
+                        "minLength": 4
+                    },
+                    {
+                        "name": "idInternoPe",
+                        "in": "path",
+                        "required": true,
+                        "description": "Clave interna cliente. Identificación numérica única por persona que asigna el sistema automáticamente al dar de alta la persona",
+                        "format": "int32",
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {
+                            "X-CorrelationId": {
+                                "type": "string",
+                                "description": "De interés a efectos de trazabilidad de la petición desde el sistema externo.",
+                                "x-example": "string"
+                            }
+                        },
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "EE_O_Consulta"
+                            ],
+                            "properties": {
+                                "EE_O_Consulta": {
+                                    "type": "object",
+                                    "description": "Estructura de la salida de la consulta de personas jurídicas.",
+                                    "required": [
+                                        "codigoRetorno"
+                                    ],
+                                    "properties": {
+                                        "codigoRetorno": {
+                                            "type": "integer",
+                                            "format": "int32",
+                                            "description": "Si la respuesta es 1 ha ido bien, para el resto de valores implica error."
+                                        },
+                                        "RespuestaConsulta": {
+                                            "type": "object",
+                                            "format": "",
+                                            "description": "Contiene los datos funcionales de la respuesta, en caso de que la operación haya sido satisfactoria.",
+                                            "required": [
+                                                "DatosPersonales",
+                                                "DatosDomicilio",
+                                                "fecUltModif",
+                                                "horaUltModif"
+                                            ],
+                                            "properties": {
+                                                "DatosPersonales": {
+                                                    "type": "object",
+                                                    "format": "",
+                                                    "description": "Datos personales del Cliente.",
+                                                    "properties": {
+                                                        "oficinaCliente": {
+                                                            "type": "string",
+                                                            "description": "Es un número que identifica unívocamente a cada Centro. Este numero ha sido asignado por el Consejo Superior Bancario.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA",
+                                                            "maxLength": 4
+                                                        },
+                                                        "telefonoMovil": {
+                                                            "type": "string",
+                                                            "description": "Número de teléfono de la persona física.  \nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA.\nPARA LA OPERACION MODIFICACION, si se modifica el teléfono móvil es obligatorio informar los indicadores: indTelPrincipalAlertas e indComercioSeguro",
+                                                            "maxLength": 20
+                                                        },
+                                                        "codigoPostal": {
+                                                            "type": "string",
+                                                            "description": "Código postal área geográfica.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA. \nEn la operación MODIFICACION, si se informa este campo se deben informar obligatoriamente codigoDomicilioTipoVia, nombreVia y nombreLocalidad de DatosDomicilio.",
+                                                            "maxLength": 5
+                                                        },
+                                                        "nombreCliente": {
+                                                            "type": "string",
+                                                            "description": "Nombre de la persona.          \nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA",
+                                                            "maxLength": 30
+                                                        },
+                                                        "apellido1Cliente": {
+                                                            "type": "string",
+                                                            "description": "Primer apellido de la persona.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA",
+                                                            "maxLength": 30
+                                                        },
+                                                        "apellido2Cliente": {
+                                                            "type": "string",
+                                                            "description": "Segundo apellido de la persona.\nNOTA: El segundo apellido es obligatorio en el ALTA si se da de alta una persona con DNI",
+                                                            "maxLength": 30
+                                                        },
+                                                        "codigoIdExterno": {
+                                                            "type": "string",
+                                                            "description": "Identifica el codigo asociado a cada tipo de identificacion externa de una persona fisica o jurdica. \nPARA LA OPERACIÓN ALTA EL CAMPO ES OBLIGATORIO.\nPARA LA OPERACIÓN MODIFICACIÓN ES OBLIGATORIO SOLO SI NO ESTÁ INFORMADO EL CAMPO idInternoPe\nVALORES:\n01=C.I.F. Nacional \n02=C.I.F. Extranjero \n03=C.I.F. provisional \n04=Numero CSB Ofi.C.R \n05=Desconocido interf \n06=Codigo de SWIFT \n07=Cod.NRBE de una E.B \n08=OTRAS P.JURIDICAS \n09=Delegacion AEAT \n10=Referencia Nomina \n11=Referencia Emisor Para Personas Fisicas \n12=NUMERO PART.JURIDICA \n13=RGA TOGA \n14=OFICINA INTEGRADA \n15=ASOCIADO A CAPITAL \n16=C.I.F.EXTR.NO RESID \n17=CODIGO FISCAL \n51=N.I.F. Nacional \n52=Pasaporte \n53=Tarj.Resi o NIF Ext \n54=Esp. No Resi.Sin NIF \n55=Esp. menor 14 Sin NIF \n56=Descon. Inter.Fis \n57=Numero Seg.Social \n58=Permiso de conducir \n59=D.N.I. \n60=Otras P.Fisicas \n61=Referencia nomins \n62=Referencia emisor \n63=Matricula Empleado \n70=Matricula Automovil",
+                                                            "enum": [
+                                                                "01",
+                                                                "02",
+                                                                "03",
+                                                                "04",
+                                                                "05",
+                                                                "06",
+                                                                "07",
+                                                                "08",
+                                                                "09",
+                                                                "10",
+                                                                "11",
+                                                                "12",
+                                                                "13",
+                                                                "14",
+                                                                "15",
+                                                                "16",
+                                                                "17",
+                                                                "51",
+                                                                "52",
+                                                                "53",
+                                                                "54",
+                                                                "55",
+                                                                "56",
+                                                                "57",
+                                                                "58",
+                                                                "59",
+                                                                "60",
+                                                                "61",
+                                                                "62",
+                                                                "63",
+                                                                "64",
+                                                                "65",
+                                                                "66",
+                                                                "70"
+                                                            ],
+                                                            "maxLength": 2
+                                                        },
+                                                        "idExterno": {
+                                                            "type": "string",
+                                                            "description": "Es una Identificacion Oficial y externa a la Entidad Financiera, de una PERSONA fisica o juridica.\nPARA LA OPERACIÓN ALTA EL CAMPO ES OBLIGATORIO\nPARA LA OPERACION MODIFICACIÓN ES OBLIGATORIO SOLO SI NO ESTÁ INFORMADO EL CAMPO idInternoPe",
+                                                            "minLength": 1,
+                                                            "maxLength": 14
+                                                        },
+                                                        "fechaCaducidadDocumento": {
+                                                            "type": "string",
+                                                            "format": "date",
+                                                            "description": "Fecha a partir de la que carece de validez el documento. \nTipo de dato fecha con formato YYYY-MM-DD.\nSerá obligatorio cuando el campo codigoIdExterno =  51  NIF"
+                                                        },
+                                                        "fechaNacimiento": {
+                                                            "type": "string",
+                                                            "format": "date",
+                                                            "description": "Fecha de nacimiento.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA"
+                                                        },
+                                                        "codigoPaisNacimiento": {
+                                                            "type": "string",
+                                                            "description": "Código de país de nacimiento de la persona dado de alta en la tabla de IRIS-Área Geográfica.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA",
+                                                            "maxLength": 3
+                                                        },
+                                                        "paisNacionalidad": {
+                                                            "type": "string",
+                                                            "description": "Código del país de nacionalidad.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA",
+                                                            "maxLength": 3
+                                                        },
+                                                        "paisResidencia": {
+                                                            "type": "string",
+                                                            "description": "Código de país de residencia del cliente.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA",
+                                                            "maxLength": 3
+                                                        },
+                                                        "anioResidPobla": {
+                                                            "type": "string",
+                                                            "format": "date",
+                                                            "description": "Año desde que se reside en la actual Población."
+                                                        },
+                                                        "aniosResidPais": {
+                                                            "type": "number",
+                                                            "format": "double",
+                                                            "description": "Años residiendo en el País.",
+                                                            "multipleOf": 1
+                                                        },
+                                                        "nombreLocalidadNacimiento": {
+                                                            "type": "string",
+                                                            "description": "Nombre de la localidad de nacimiento.",
+                                                            "maxLength": 45
+                                                        },
+                                                        "codigoProvincia": {
+                                                            "type": "string",
+                                                            "description": "Código de provincia de nacimiento.\nCampo obligatorio si el país Nacimiento es España (código 011)",
+                                                            "maxLength": 2
+                                                        },
+                                                        "nombreProvinciaNacimiento": {
+                                                            "type": "string",
+                                                            "description": "Nombre de la provincia de nacimiento.",
+                                                            "maxLength": 35
+                                                        },
+                                                        "sexo": {
+                                                            "type": "string",
+                                                            "description": "Sexo. \nM-Mujer\nH-Hombre\nD-Desconocido\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA",
+                                                            "enum": [
+                                                                "M",
+                                                                "H",
+                                                                "D"
+                                                            ],
+                                                            "maxLength": 1,
+                                                            "minLength": 1
+                                                        },
+                                                        "codigoEstadoCivil": {
+                                                            "type": "string",
+                                                            "description": "Código de estado civil dado de alta en la tabla de IRIS PGE-00032.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA\nValores:\n01 - SOLTERO/A\n02 - SEPARADO/A\n03 - DIVORCIADO/A\n04 - VIUDO/A\n05 - CASADO/A\n06 - UNION DE HECHO\n99 - DESCONOCIDO",
+                                                            "enum": [
+                                                                "01",
+                                                                "02",
+                                                                "03",
+                                                                "04",
+                                                                "05",
+                                                                "06",
+                                                                "99"
+                                                            ],
+                                                            "maxLength": 2,
+                                                            "minLength": 2
+                                                        },
+                                                        "miembrosUnidadFamiliar": {
+                                                            "type": "number",
+                                                            "format": "double",
+                                                            "description": "Número de componentes Unidad Familiar",
+                                                            "multipleOf": 1
+                                                        },
+                                                        "numeroHijos": {
+                                                            "type": "integer",
+                                                            "format": "int32",
+                                                            "description": "Número de hijos."
+                                                        },
+                                                        "codigoRegimenEconomico": {
+                                                            "type": "integer",
+                                                            "format": "int32",
+                                                            "description": "Código régimen económico dado de alta en la tabla  de IRIS-PGE-00033\nRégimen del matrimonio.\n1 - BIENES GANANCIALES\n2 - SEPARACIÓN DE BIENES\n3 - COMUNIDAD DE BIENES\n4 - REGIMEN ESPECIAL\n9 - DESCONOCIDO\nEste campo es obligatorio si el estado civil es 05.Casado"
+                                                        },
+                                                        "codigoCNO": {
+                                                            "type": "string",
+                                                            "description": "Código CNO dado de alta en la tabla de IRIS-POT-00022 Código Nacional De Ocupación.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA\nEn el caso de situación laboral distinta de 01, 02, el código CNO debe valer 999999",
+                                                            "maxLength": 6
+                                                        },
+                                                        "telefono": {
+                                                            "type": "string",
+                                                            "description": "Teléfono domicilio.",
+                                                            "maxLength": 20
+                                                        },
+                                                        "mail": {
+                                                            "type": "string",
+                                                            "description": "Correo electrónico de la dirección principal.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA",
+                                                            "maxLength": 50
+                                                        }
+                                                    }
+                                                },
+                                                "DatosDomicilio": {
+                                                    "type": "object",
+                                                    "format": "",
+                                                    "description": "Datos domicilio del Cliente.",
+                                                    "properties": {
+                                                        "codigoProvinciaDomicilio": {
+                                                            "type": "string",
+                                                            "description": "Código de provincia del domicilio. \nEs Obligatorio si el código de país del domicilio es 011, España.",
+                                                            "maxLength": 2
+                                                        },
+                                                        "nombreProvinciaDomicilio": {
+                                                            "type": "string",
+                                                            "description": "Nombre de la provincia. \nSólo se podrá informar si el código de país del domicilio no es 011, España.",
+                                                            "maxLength": 35
+                                                        },
+                                                        "nombreLocalidad": {
+                                                            "type": "string",
+                                                            "description": "Nombre de la localidad del domicilio de la persona.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA.\nEn la operación MODIFICACION, si se informa este campo se deben informar obligatoriamente codigoDomicilioTipoVia y  nombreVia de DatosDomicilio y codigoPostal de DatosPersonales",
+                                                            "maxLength": 45
+                                                        },
+                                                        "codigoDomicilioTipoVia": {
+                                                            "type": "string",
+                                                            "description": "Código de via\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA.\nEn la operación MODIFICACION, si se informa este campo se deben informar obligatoriamente nombreVia y nombreLocalidad de DatosDomicilio y codigoPostal de DatosPersonales",
+                                                            "maxLength": 2
+                                                        },
+                                                        "nombreVia": {
+                                                            "type": "string",
+                                                            "description": "Nombre de via del domicilio de la persona\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA.\nEn la operación MODIFICACION, si se informa este campo se deben informar obligatoriamente codigoDomicilioTipoVia y nombreLocalidad de DatosDomicilio y codigoPostal de DatosPersonales",
+                                                            "maxLength": 45
+                                                        },
+                                                        "domicilioNumero": {
+                                                            "type": "string",
+                                                            "description": "Número del domicilio. Si se desconoce será S/N.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA",
+                                                            "maxLength": 4
+                                                        },
+                                                        "domicilioPortal": {
+                                                            "type": "string",
+                                                            "description": "Portal del domicilio.",
+                                                            "maxLength": 2
+                                                        },
+                                                        "domicilioEscalera": {
+                                                            "type": "string",
+                                                            "description": "Escalera del domicilio.               ",
+                                                            "maxLength": 2
+                                                        },
+                                                        "domicilioPlanta": {
+                                                            "type": "string",
+                                                            "description": "Planta del domicilio.",
+                                                            "maxLength": 3
+                                                        },
+                                                        "domicilioPuerta": {
+                                                            "type": "string",
+                                                            "description": "Puerta del domicilio.",
+                                                            "maxLength": 2
+                                                        },
+                                                        "codigoPaisResidencia": {
+                                                            "type": "string",
+                                                            "description": "Código de país de domicilio, dado de alta en la tabla de IRIS-Área Geográfica.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA",
+                                                            "maxLength": 3
+                                                        },
+                                                        "anioAdquisicion": {
+                                                            "type": "string",
+                                                            "format": "date",
+                                                            "description": "Año de adquisición de la propiedad.\nObligatorio, si regimenOcupacion tiene los siguientes valores:\n1-Propiedad sin hipoteca\n4-Propiedad hipotecada\nEn otro caso, NO informar."
+                                                        },
+                                                        "bloque": {
+                                                            "type": "string",
+                                                            "description": "Dato adicional información de domicilio: Bloque",
+                                                            "maxLength": 2
+                                                        },
+                                                        "fase": {
+                                                            "type": "string",
+                                                            "description": "Dato adicional información de domicilio: Fase",
+                                                            "maxLength": 3
+                                                        },
+                                                        "parcela": {
+                                                            "type": "string",
+                                                            "description": "Dato adicional información de domicilio: Parcela",
+                                                            "maxLength": 45
+                                                        },
+                                                        "otrosDatos": {
+                                                            "type": "string",
+                                                            "description": "Otros datos relacionados con el domicilio",
+                                                            "maxLength": 100
+                                                        }
+                                                    }
+                                                },
+                                                "DatosSocioEconomicos": {
+                                                    "type": "object",
+                                                    "format": "",
+                                                    "description": "Datos económicos del Cliente.",
+                                                    "properties": {
+                                                        "regimenOcupacion": {
+                                                            "type": "string",
+                                                            "description": "Código de Régimen de Ocupación:\nLos posibles valores son:\n1.Propiedad sin hipoteca\n2.En alquiler\n3.Cedido\n4.Propiedad hipotecada\n5.Casa de padres\n6.Propiedad hipotecada (Cancela)\n9.Otros\nNOTA: el valor 6 es exclusivo de EVO, la TR SOA realizará esta validación internamente, no siendo posible este valor para entidad distinta de 0239 - EVO",
+                                                            "maxLength": 1,
+                                                            "minLength": 1
+                                                        },
+                                                        "codigoSituacionLaboral": {
+                                                            "type": "string",
+                                                            "description": "Código de situación laboral dado de alta en la tabla  de IRIS-PGE-00034 Estado Laboral.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA\n01 - TRABAJADOR POR CUENTA AJENA.\n02 - TRABAJADOR CUENTA PROPIA.\n03 - NO EMPLEADO. DEMANDA.\n04 - NO EMPLEADO. NO DEMANDA.\n05 - JUBILADO.\n06 - AMA DE CASA.\n07 - MENOR DE EDAD.\n08 - ESTUDIANTE.\n09 - SERVICIO MILITAR.\n10 - OTROS PASIVOS.\n11 - RENTISTA.\n12 - FUNCIONARIO.\n98 - TRABAJADOR POR CUENTA AJENA/TEMPORAL.\n99 - DESCONOCIDO.",
+                                                            "enum": [
+                                                                "01",
+                                                                "02",
+                                                                "03",
+                                                                "04",
+                                                                "05",
+                                                                "06",
+                                                                "07",
+                                                                "08",
+                                                                "09",
+                                                                "10",
+                                                                "11",
+                                                                "12",
+                                                                "98",
+                                                                "99"
+                                                            ],
+                                                            "maxLength": 2,
+                                                            "minLength": 2
+                                                        },
+                                                        "idioma": {
+                                                            "type": "string",
+                                                            "description": "Código del idioma.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA\n01 CASTELLANO\n02 CATALAN\n03 GALLEGO\n04 EUSKERA",
+                                                            "enum": [
+                                                                "01",
+                                                                "02",
+                                                                "03",
+                                                                "04"
+                                                            ],
+                                                            "maxLength": 2,
+                                                            "minLength": 2
+                                                        },
+                                                        "codigoRazonAltaPersona": {
+                                                            "type": "string",
+                                                            "description": "Código de razón de alta en la tabla de IRIS-PGE-00003 Razón de alta de la persona.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA\n01 - PRODUCTO EN PARTICULAR\n02 - GESTIÓN DE EMPLEADO\n03 - RELACIÓN CON CLIENTE ACTUAL\n04 - CAMPAÑA PUBLICITARIA\n05 - IMAGEN DE LA ENTIDAD\n06 - PROXIMIDAD AL DOMICILIO\n07 - PROXIMIDAD AL TRABAJO\n08 - ESPONTÁNEO\n09 - INFORMACIÓN HISTÓRICA\n10 - EMISOR EXT.NÓMINAS\n11 - EMISOR EXT.RECIBOS DOMICILIO\n12 - EMISOR EXT.EFECTOS (LIBR-EXT)\n13 - ALTA RURALVÍA\n14 - ALTA MEDIOS DE PAGO\n15 - TEBE\n16 - PRÉSTAMO AUTOMÁTICO DE COMERCIO\n17 - ALTA DE PENSIONES\n18 - MICROINFORMÁTICA\n19 - POTENCIAL CRM\n20 - ALTA PROCESOS CONTRATACIÓN\n21 - EMISOR DE VALORES\n99 - OTROS",
+                                                            "enum": [
+                                                                "01",
+                                                                "02",
+                                                                "03",
+                                                                "04",
+                                                                "05",
+                                                                "06",
+                                                                "07",
+                                                                "08",
+                                                                "09",
+                                                                "10",
+                                                                "11",
+                                                                "12",
+                                                                "13",
+                                                                "14",
+                                                                "15",
+                                                                "16",
+                                                                "17",
+                                                                "18",
+                                                                "19",
+                                                                "20",
+                                                                "21",
+                                                                "23",
+                                                                "99"
+                                                            ],
+                                                            "maxLength": 2,
+                                                            "minLength": 2
+                                                        },
+                                                        "codigoCNAE": {
+                                                            "type": "string",
+                                                            "description": "Código CNAE dado de alta en la tabla de IRIS-POT-00015 C.N.A.E.\nEs obligatorio si codigoSituacionLaboral es igual a 02-Trabajador por Cuenta Propia.",
+                                                            "maxLength": 6
+                                                        },
+                                                        "fechaAltaAutonomo": {
+                                                            "type": "string",
+                                                            "format": "date",
+                                                            "description": "Fecha de alta de autónomo. Es obligatorio si se indica CNAE. \nSi se desconoce se pondrá valor = 1111-11-11.\nEs opcional salvo que codigoSituacionLaboral = 02 TRABAJADOR CUENTA PROPIA, entonces es obligatorio.\nTipo de dato fecha con formato YYYY-MM-DD"
+                                                        },
+                                                        "fechaAntiguedadLaboral": {
+                                                            "type": "string",
+                                                            "format": "date",
+                                                            "description": "Fecha de Antiguedad Laboral.\nTipo de dato fecha con formato YYYY-MM-DD"
+                                                        },
+                                                        "aniosGlobalesTrabajados": {
+                                                            "type": "number",
+                                                            "format": "double",
+                                                            "description": "Años globales trabajados",
+                                                            "multipleOf": 1
+                                                        },
+                                                        "cifEmpresa": {
+                                                            "type": "string",
+                                                            "description": "CIF de la empresa.",
+                                                            "minLength": 1,
+                                                            "maxLength": 14
+                                                        },
+                                                        "nombreEmpresa": {
+                                                            "type": "string",
+                                                            "description": "Nombre de la empresa.",
+                                                            "maxLength": 90
+                                                        },
+                                                        "telefonoEmpresa": {
+                                                            "type": "string",
+                                                            "description": "Telefono de la empresa.",
+                                                            "maxLength": 20
+                                                        },
+                                                        "cargo": {
+                                                            "type": "string",
+                                                            "description": " Cargo.                            ",
+                                                            "maxLength": 30
+                                                        },
+                                                        "fechaAntiguaCargo": {
+                                                            "type": "string",
+                                                            "format": "date",
+                                                            "description": "Fecha Ant. Cargo.\nTipo de dato fecha con formato YYYY-MM-DD"
+                                                        },
+                                                        "nivelSalarial": {
+                                                            "type": "integer",
+                                                            "format": "int32",
+                                                            "description": "Nivel salarial.\nTABLA TP_NIV_INGR_INDV IRIS-POT-00024              ",
+                                                            "maximum": 100,
+                                                            "exclusiveMaximum": true
+                                                        },
+                                                        "codigoContrato": {
+                                                            "type": "string",
+                                                            "description": "Código del tipo de contrato.\nValores posibles:\n01 ORDINARIO POR TIEMPO INDEFINIDO\n02 TEMPORAL DE FOMENTO DE EMPLEO\n03 A TIEMPO PARCIAL\n04 A TIEMPO PARCIAL PREST. SERV. INFERIOR A 12H/SEMANA\n05 A TIEMPO PARCIAL DE RELEVO\n06 EN PRACTICAS\n07 PARA LA FORMACION\n08 DE APRENDIZAJE\n09 SIN CONTRATO(DESEMPLEO, JUBILADO, ESTUDIANTE...)\n99 DESCONOCIDO",
+                                                            "enum": [
+                                                                "01",
+                                                                "02",
+                                                                "03",
+                                                                "04",
+                                                                "05",
+                                                                "06",
+                                                                "07",
+                                                                "08",
+                                                                "09",
+                                                                "99"
+                                                            ],
+                                                            "maxLength": 2,
+                                                            "minLength": 2
+                                                        },
+                                                        "fechaFinContrato": {
+                                                            "type": "string",
+                                                            "format": "date",
+                                                            "description": "Fecha Fin Contrato Temporal.\nTipo de dato fecha con formato YYYY-MM-DD. \nObligatoria si codigoContrato es 02 Temporal de fomento de empleo"
+                                                        },
+                                                        "duracion": {
+                                                            "type": "integer",
+                                                            "format": "int32",
+                                                            "description": "Duración.\nPosibles valores:\n1 Indefinido\n2 Temporal\nSi codigoContrato es 02 Temporal de fomento de empleo debe valer 2 - Temporal",
+                                                            "minimum": 1,
+                                                            "maximum": 2
+                                                        },
+                                                        "jornada": {
+                                                            "type": "integer",
+                                                            "format": "int32",
+                                                            "description": "Jornada.\nPosibles valores:\n1 Completo\n2 Parcial",
+                                                            "minimum": 1,
+                                                            "maximum": 2
+                                                        },
+                                                        "continuidad": {
+                                                            "type": "integer",
+                                                            "format": "int32",
+                                                            "description": "Continuidad.\nPosibles valores:\n1 Continuo\n2 Discontinuo",
+                                                            "minimum": 1,
+                                                            "maximum": 2
+                                                        },
+                                                        "dedicacion": {
+                                                            "type": "integer",
+                                                            "format": "int32",
+                                                            "description": "Dedicación.\nPosibles valores:\n1 Exclusiva\n2 No exclusiva",
+                                                            "minimum": 1,
+                                                            "maximum": 2
+                                                        },
+                                                        "tipoDeclaracion": {
+                                                            "type": "integer",
+                                                            "format": "int32",
+                                                            "description": "Tipo de declaración.\nPosibles valores:\n1 Estimación Directa\n2 Estimación Objetiva",
+                                                            "minimum": 1,
+                                                            "maximum": 2
+                                                        },
+                                                        "declaracionIVAUltimoEjercicio": {
+                                                            "type": "number",
+                                                            "format": "double",
+                                                            "description": "Declaración IVA último ejercicio.",
+                                                            "multipleOf": 0.01
+                                                        },
+                                                        "beneficioEjercicioAnterior": {
+                                                            "type": "number",
+                                                            "format": "double",
+                                                            "description": "Beneficio ejercicio anterior.",
+                                                            "multipleOf": 0.01
+                                                        },
+                                                        "beneficioEjercicioActual": {
+                                                            "type": "number",
+                                                            "format": "double",
+                                                            "description": "Beneficio ejercicio actual.",
+                                                            "multipleOf": 0.01
+                                                        }
+                                                    }
+                                                },
+                                                "OtrosDatosPersona": {
+                                                    "type": "object",
+                                                    "format": "",
+                                                    "description": "Otros datos del Cliente.",
+                                                    "properties": {
+                                                        "indPubliPe": {
+                                                            "type": "string",
+                                                            "description": "Indicador de no Publicidad del cliente.\nValores:\nS Si quiere publicidad.\nN No quiere publicidad\nSi no se informa en el Alta el sistema informa a S por defecto.",
+                                                            "enum": [
+                                                                "S",
+                                                                "N"
+                                                            ],
+                                                            "maxLength": 1,
+                                                            "minLength": 1
+                                                        },
+                                                        "idPeInversis": {
+                                                            "type": "string",
+                                                            "description": "Representa el número de persona del cliente en Inversis.",
+                                                            "maxLength": 9
+                                                        },
+                                                        "indBloqueoNoCliente": {
+                                                            "type": "string",
+                                                            "description": "Indicador de bloqueo para no cliente.\nValores:\nS - No se enviará publicidad, ni se concede la cesión de datos a terceros, ni se permite realización de perfiles por empresas grupo y no grupo. \nN - No se quiere bloquear el envío de publicidad ni la cesión a terceros, ni la realización de perfiles, admitiendo que se bloquee cada campo por separado.\nSi no se informa en el Alta, este indicador quedará sin informar.\nValores:\nS - Si quiere bloquear RGPD. No se enviará publicidad, ni se concede la cesión de datos a terceros, ni se permite realización de perfiles por empresas grupo y no grupo.\nN - No se quiere bloquear el envío de publicidad ni la cesión a terceros, ni la cesión a terceros, admitiendo que se bloquee cada campo por separado.\nSi no se informa en el Alta, este indicador quedará sin informar.",
+                                                            "enum": [
+                                                                "S",
+                                                                "N"
+                                                            ],
+                                                            "maxLength": 1,
+                                                            "minLength": 1
+                                                        },
+                                                        "indNoCesiEmpGrupo": {
+                                                            "type": "string",
+                                                            "description": "Indicador de no cesión de datos a  empresas del grupo. \nValores:\nS - Si quiere bloquear la cesión de datos a empresas del grupo. \nN - Se admitirá la cesión de datos a empresas del grupo.\nSi no se informa en el Alta, este indicador quedará sin informar.\nNOTA: si la persona a dar de alta es un cliente, este campo es obligatorio.",
+                                                            "enum": [
+                                                                "S",
+                                                                "N"
+                                                            ],
+                                                            "maxLength": 1,
+                                                            "minLength": 1
+                                                        },
+                                                        "indNoPubliPostal": {
+                                                            "type": "string",
+                                                            "description": "Indicador de no enviar publicidad por correo postal. \nValores:\nS - Si quiere bloquear el envío de publicidad por correo postal.\nN - Se admitirá el envío de publicidad de correo postal.\nSi no se informa en el Alta, este indicador quedará sin informar.",
+                                                            "enum": [
+                                                                "S",
+                                                                "N"
+                                                            ],
+                                                            "maxLength": 1,
+                                                            "minLength": 1
+                                                        },
+                                                        "indNoPubliElect": {
+                                                            "type": "string",
+                                                            "description": "Indicador de no enviar publicidad por correo electrónico. \nValores:\nS - Si quiere bloquear el envío de publicidad por correo electrónico.\nN - Se admitirá el envío de publicidad por correo electrónico\nSi no se informa en el Alta, este indicador quedará sin informar.",
+                                                            "enum": [
+                                                                "S",
+                                                                "N"
+                                                            ],
+                                                            "maxLength": 1,
+                                                            "minLength": 1
+                                                        },
+                                                        "indNoPubliMovil": {
+                                                            "type": "string",
+                                                            "description": "Indicador de no enviar publicidad por mensajería móvil. \nValores:\nS - Si quiere bloquear el envío de publicidad por mensajería móvil.\nN - Se admitirá el envío de publicidad al teléfono móvil\nSi no se informa en el Alta, este indicador quedará sin informar.",
+                                                            "enum": [
+                                                                "S",
+                                                                "N"
+                                                            ],
+                                                            "maxLength": 1,
+                                                            "minLength": 1
+                                                        },
+                                                        "indNoPubliTelef": {
+                                                            "type": "string",
+                                                            "description": "Indicador de no enviar publicidad por teléfono por contact center. \nValores:\nS - Si quiere bloquear el envío de publicidad al teléfono.\nN - Se admitirá el envío de publicidad al teléfono\nSi no se informa en el Alta, este indicador quedará sin informar.",
+                                                            "enum": [
+                                                                "S",
+                                                                "N"
+                                                            ],
+                                                            "maxLength": 1,
+                                                            "minLength": 1
+                                                        },
+                                                        "indNoPubliBancaElec": {
+                                                            "type": "string",
+                                                            "description": "Indicador de no enviar publicidad por banca electrónica. \nValores:\nS - Si quiere bloquear el envío de publicidad a banca electrónica.\nN - Se admitirá el envío de publicidad a banca electrónica.\nSi no se informa en el Alta, este indicador quedará sin informar.",
+                                                            "enum": [
+                                                                "S",
+                                                                "N"
+                                                            ],
+                                                            "maxLength": 1,
+                                                            "minLength": 1
+                                                        },
+                                                        "indNoPubliBuzVirt": {
+                                                            "type": "string",
+                                                            "description": "Indicador de no enviar publicidad por buzón virtual. \nValores:\nS - Si quiere bloquear el envío de publicidad al buzón virtual.\nN - Se admitirá el envío de publicidad al buzón virtual.\nSi no se informa en el Alta, este indicador quedará sin informar.",
+                                                            "enum": [
+                                                                "S",
+                                                                "N"
+                                                            ],
+                                                            "maxLength": 1,
+                                                            "minLength": 1
+                                                        },
+                                                        "indNoPubliCajeAut": {
+                                                            "type": "string",
+                                                            "description": "Indicador de no enviar publicidad al cajero automático. \nValores:\nS - Si quiere bloquear el envío de publicidad al cajero automático.\nN - Se admitirá el envío de publicidad al cajero automático.\nSi no se informa en el Alta, este indicador quedará sin informar.",
+                                                            "enum": [
+                                                                "S",
+                                                                "N"
+                                                            ],
+                                                            "maxLength": 1,
+                                                            "minLength": 1
+                                                        },
+                                                        "indNoPubliOficina": {
+                                                            "type": "string",
+                                                            "description": "Indicador de no enviar publicidad desde oficina. Valores:\nS=Si quiere bloquear el envío de publicidad desde Oficina.\nDistinto de S, se admitirá el envío de publicidad desde Oficina.\nSi no se informa en el Alta, este indicador quedará sin informar.",
+                                                            "enum": [
+                                                                "S",
+                                                                "N"
+                                                            ],
+                                                            "maxLength": 1,
+                                                            "minLength": 1
+                                                        },
+                                                        "indListaRobinson": {
+                                                            "type": "string",
+                                                            "description": "Indicador de Lista Robinson. \nValores:\nS – Persona incluida dentro de la Lista Robinson. Los indicadores de Cesión y perfilados de datos externos recogerán el último valor informado por el cliente, no el que la Lista Robinson informa en el sistema.\nN - Persona no incluida dentro de la Lista Robinson.\nEl valor del campo sólo se puede modificar si la entidad lo permite.\nEn la Consulta si viene informado a ‘S’ los campos indNoCesiEmpGrupo, indNoCesionEmpNoGrupo e indPubliPe devolverán el último valor expresado por el cliente.\nSi no se informa en el Alta, este indicador quedará sin informar.",
+                                                            "enum": [
+                                                                "S",
+                                                                "N"
+                                                            ],
+                                                            "maxLength": 1,
+                                                            "minLength": 1
+                                                        },
+                                                        "indNoCesionEmpNoGrupo": {
+                                                            "type": "string",
+                                                            "description": "Indicador de no cesión de datos a Empresas No Grupo. \nValores:\nS - Si quiere bloquear la cesión de datos a Empresas No Grupo.\nN - Se admitirá la cesión de datos a Empresas No Grupo.\nSi no se informa en el Alta, este indicador quedará sin informar.\nNOTA: si la persona a dar de alta es un cliente, este campo es obligatorio.",
+                                                            "enum": [
+                                                                "S",
+                                                                "N"
+                                                            ],
+                                                            "maxLength": 1,
+                                                            "minLength": 1
+                                                        },
+                                                        "indPerfilPropPublic": {
+                                                            "type": "string",
+                                                            "description": "Indicador para elaborar perfiles propios/públicos:\nS – Persona que si permite utilizar la información para la realización de perfiles propios/públicos.\nN - Persona que no permite utilizar la información para la realización de perfiles propios/públicos.\nSi no se informa en el Alta el sistema informa a S por defecto.",
+                                                            "enum": [
+                                                                "S",
+                                                                "N"
+                                                            ],
+                                                            "maxLength": 1,
+                                                            "minLength": 1
+                                                        },
+                                                        "indPerfilDatExternos": {
+                                                            "type": "string",
+                                                            "description": "Indicador para elaborar perfiles con datos externos:\nS - Persona que si permite la realización de perfiles utilizando datos externos a la entidad.\nN - Persona que no permite la realización de perfiles utilizando datos externos a la entidad.\nSi no se informa en el Alta, este indicador quedará sin informar.\nNOTA: si la persona a dar de alta es un cliente, este campo es obligatorio.",
+                                                            "enum": [
+                                                                "S",
+                                                                "N"
+                                                            ],
+                                                            "maxLength": 1,
+                                                            "minLength": 1
+                                                        }
+                                                    }
+                                                },
+                                                "fecUltModif": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "description": "Fecha de la última modificación"
+                                                },
+                                                "horaUltModif": {
+                                                    "type": "string",
+                                                    "description": "Hora de última modificación en formato HH:MM:SS",
+                                                    "maxLength": 8,
+                                                    "minLength": 8,
+                                                    "pattern": "([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "headers": {
+                            "X-CorrelationId": {
+                                "type": "string",
+                                "description": "De interés a efectos de trazabilidad de la petición desde el sistema externo.",
+                                "x-example": "string"
+                            }
+                        },
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "EE_O_Consulta"
+                            ],
+                            "properties": {
+                                "EE_O_Consulta": {
+                                    "type": "object",
+                                    "description": "Estructura de la salida de la consulta de personas jurídicas.",
+                                    "required": [
+                                        "codigoRetorno"
+                                    ],
+                                    "properties": {
+                                        "codigoRetorno": {
+                                            "type": "integer",
+                                            "format": "int32",
+                                            "description": "Si la respuesta es 1 ha ido bien, para el resto de valores implica error."
+                                        },
+                                        "Errores": {
+                                            "type": "object",
+                                            "format": "",
+                                            "description": "Salida estándar de errores.",
+                                            "required": [
+                                                "codigoMostrar",
+                                                "mensajeMostrar"
+                                            ],
+                                            "properties": {
+                                                "codigoMostrar": {
+                                                    "type": "string",
+                                                    "description": "Código del Error"
+                                                },
+                                                "mensajeMostrar": {
+                                                    "type": "string",
+                                                    "description": "Descripción del mensaje de Error"
+                                                },
+                                                "solucion": {
+                                                    "type": "string",
+                                                    "description": "Solución del error"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "headers": {
+                            "X-CorrelationId": {
+                                "type": "string",
+                                "description": "De interés a efectos de trazabilidad de la petición desde el sistema externo.",
+                                "x-example": "string"
+                            }
+                        },
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "EE_O_Consulta"
+                            ],
+                            "properties": {
+                                "EE_O_Consulta": {
+                                    "type": "object",
+                                    "description": "Estructura de la salida de la consulta de personas jurídicas.",
+                                    "required": [
+                                        "codigoRetorno"
+                                    ],
+                                    "properties": {
+                                        "codigoRetorno": {
+                                            "type": "integer",
+                                            "format": "int32",
+                                            "description": "Si la respuesta es 1 ha ido bien, para el resto de valores implica error."
+                                        },
+                                        "Errores": {
+                                            "type": "object",
+                                            "format": "",
+                                            "description": "Salida estándar de errores.",
+                                            "required": [
+                                                "codigoMostrar",
+                                                "mensajeMostrar"
+                                            ],
+                                            "properties": {
+                                                "codigoMostrar": {
+                                                    "type": "string",
+                                                    "description": "Código del Error"
+                                                },
+                                                "mensajeMostrar": {
+                                                    "type": "string",
+                                                    "description": "Descripción del mensaje de Error"
+                                                },
+                                                "solucion": {
+                                                    "type": "string",
+                                                    "description": "Solución del error"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "summary": "Gestión de personas ampliada: alta, modificación y consulta  de personas físicas.",
+                "description": "",
+                "tags": [],
+                "x-auth-type": "Application & Application User",
+                "x-throttling-tier": "Unlimited",
+                "parameters": [
+                    {
+                        "name": "CODCanal",
+                        "in": "header",
+                        "required": false,
+                        "type": "string",
+                        "description": "Campo que identifica al código del canal",
+                        "x-example": "string"
+                    },
+                    {
+                        "name": "X-SignatureName",
+                        "in": "header",
+                        "required": true,
+                        "type": "string",
+                        "description": "Nombre de la clave usada para la firma",
+                        "x-example": "string"
+                    },
+                    {
+                        "name": "X-Signature",
+                        "in": "header",
+                        "required": true,
+                        "type": "string",
+                        "description": "La firma de la petición a enviar",
+                        "x-example": "string"
+                    },
+                    {
+                        "name": "X-CorrelationId",
+                        "in": "header",
+                        "required": false,
+                        "type": "string",
+                        "description": "Id de correlación",
+                        "x-example": "string"
+                    },
+                    {
+                        "name": "idInternoPe",
+                        "in": "path",
+                        "required": true,
+                        "description": "Clave interna cliente. Identificación numérica única por persona que asigna el sistema automáticamente al dar de alta la persona\nPARA LA OPERACIÓN MODIFICACIÓN ES OBLIGATORIO SOLO SI NO ESTÁN INFORMADOS LOS CAMPOS codigoIdExterno / idExterno (estructura DatosPersonales)",
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "EE_I_Modificacion",
+                        "in": "body",
+                        "required": true,
+                        "description": "Modificación de datos ampliada de personas.\r\nSi la operación acaba con OK se guarda la fecha y hora de la ejecución. Estos campos son consultables en operación Consulta - GET.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "EE_I_Modificacion": {
+                                    "type": "object",
+                                    "required": [
+                                        "codigoEntidad",
+                                        "idInternoPe"
+                                    ],
+                                    "properties": {
+                                        "codigoEntidad": {
+                                            "type": "string",
+                                            "description": "El Codigo NRBE de Entidad representa el numero de Registro del Banco de España que tiene la Entidad.",
+                                            "maxLength": 4
+                                        },
+                                        "idInternoPe": {
+                                            "type": "integer",
+                                            "format": "int32",
+                                            "description": "Clave interna cliente. Identificación numérica única por persona que asigna el sistema automáticamente al dar de alta la persona\nPARA LA OPERACIÓN MODIFICACIÓN ES OBLIGATORIO SOLO SI NO ESTÁN INFORMADOS LOS CAMPOS codigoIdExterno / idExterno (estructura DatosPersonales)"
+                                        },
+                                        "DatosPersonales": {
+                                            "type": "object",
+                                            "description": "Datos personales",
+                                            "properties": {
+                                                "oficinaCliente": {
+                                                    "type": "string",
+                                                    "description": "Es un número que identifica unívocamente a cada Centro. Este numero ha sido asignado por el Consejo Superior Bancario.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA",
+                                                    "maxLength": 4
+                                                },
+                                                "telefonoMovil": {
+                                                    "type": "string",
+                                                    "description": "Número de teléfono de la persona física.  \nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA.\nPARA LA OPERACION MODIFICACION, si se modifica el teléfono móvil es obligatorio informar los indicadores: indTelPrincipalAlertas e indComercioSeguro",
+                                                    "maxLength": 20
+                                                },
+                                                "codigoPostal": {
+                                                    "type": "string",
+                                                    "description": "Código postal área geográfica.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA. \nEn la operación MODIFICACION, si se informa este campo se deben informar obligatoriamente codigoDomicilioTipoVia, nombreVia y nombreLocalidad de DatosDomicilio.",
+                                                    "maxLength": 5
+                                                },
+                                                "nombreCliente": {
+                                                    "type": "string",
+                                                    "description": "Nombre de la persona.          \nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA",
+                                                    "maxLength": 30
+                                                },
+                                                "apellido1Cliente": {
+                                                    "type": "string",
+                                                    "description": "Primer apellido de la persona.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA",
+                                                    "maxLength": 30
+                                                },
+                                                "apellido2Cliente": {
+                                                    "type": "string",
+                                                    "description": "Segundo apellido de la persona.\nNOTA: El segundo apellido es obligatorio en el ALTA si se da de alta una persona con DNI",
+                                                    "maxLength": 30
+                                                },
+                                                "codigoIdExterno": {
+                                                    "type": "string",
+                                                    "description": "Identifica el codigo asociado a cada tipo de identificacion externa de una persona fisica o jurdica. \nPARA LA OPERACIÓN ALTA EL CAMPO ES OBLIGATORIO.\nPARA LA OPERACIÓN MODIFICACIÓN ES OBLIGATORIO SOLO SI NO ESTÁ INFORMADO EL CAMPO idInternoPe\nVALORES:\n01=C.I.F. Nacional \n02=C.I.F. Extranjero \n03=C.I.F. provisional \n04=Numero CSB Ofi.C.R \n05=Desconocido interf \n06=Codigo de SWIFT \n07=Cod.NRBE de una E.B \n08=OTRAS P.JURIDICAS \n09=Delegacion AEAT \n10=Referencia Nomina \n11=Referencia Emisor Para Personas Fisicas \n12=NUMERO PART.JURIDICA \n13=RGA TOGA \n14=OFICINA INTEGRADA \n15=ASOCIADO A CAPITAL \n16=C.I.F.EXTR.NO RESID \n17=CODIGO FISCAL \n51=N.I.F. Nacional \n52=Pasaporte \n53=Tarj.Resi o NIF Ext \n54=Esp. No Resi.Sin NIF \n55=Esp. menor 14 Sin NIF \n56=Descon. Inter.Fis \n57=Numero Seg.Social \n58=Permiso de conducir \n59=D.N.I. \n60=Otras P.Fisicas \n61=Referencia nomins \n62=Referencia emisor \n63=Matricula Empleado \n70=Matricula Automovil",
+                                                    "enum": [
+                                                        "01",
+                                                        "02",
+                                                        "03",
+                                                        "04",
+                                                        "05",
+                                                        "06",
+                                                        "07",
+                                                        "08",
+                                                        "09",
+                                                        "10",
+                                                        "11",
+                                                        "12",
+                                                        "13",
+                                                        "14",
+                                                        "15",
+                                                        "16",
+                                                        "17",
+                                                        "51",
+                                                        "52",
+                                                        "53",
+                                                        "54",
+                                                        "55",
+                                                        "56",
+                                                        "57",
+                                                        "58",
+                                                        "59",
+                                                        "60",
+                                                        "61",
+                                                        "62",
+                                                        "63",
+                                                        "64",
+                                                        "65",
+                                                        "66",
+                                                        "70"
+                                                    ],
+                                                    "maxLength": 2
+                                                },
+                                                "idExterno": {
+                                                    "type": "string",
+                                                    "description": "Es una Identificacion Oficial y externa a la Entidad Financiera, de una PERSONA fisica o juridica.\nPARA LA OPERACIÓN ALTA EL CAMPO ES OBLIGATORIO\nPARA LA OPERACION MODIFICACIÓN ES OBLIGATORIO SOLO SI NO ESTÁ INFORMADO EL CAMPO idInternoPe",
+                                                    "minLength": 1,
+                                                    "maxLength": 14
+                                                },
+                                                "fechaCaducidadDocumento": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "description": "Fecha a partir de la que carece de validez el documento. \nTipo de dato fecha con formato YYYY-MM-DD.\nSerá obligatorio cuando el campo codigoIdExterno =  51  NIF"
+                                                },
+                                                "fechaNacimiento": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "description": "Fecha de nacimiento.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA"
+                                                },
+                                                "codigoPaisNacimiento": {
+                                                    "type": "string",
+                                                    "description": "Código de país de nacimiento de la persona dado de alta en la tabla de IRIS-Área Geográfica.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA",
+                                                    "maxLength": 3
+                                                },
+                                                "paisNacionalidad": {
+                                                    "type": "string",
+                                                    "description": "Código del país de nacionalidad.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA",
+                                                    "maxLength": 3
+                                                },
+                                                "paisResidencia": {
+                                                    "type": "string",
+                                                    "description": "Código de país de residencia del cliente.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA",
+                                                    "maxLength": 3
+                                                },
+                                                "anioResidPobla": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "description": "Año desde que se reside en la actual Población."
+                                                },
+                                                "aniosResidPais": {
+                                                    "type": "number",
+                                                    "format": "double",
+                                                    "description": "Años residiendo en el País.",
+                                                    "multipleOf": 1
+                                                },
+                                                "nombreLocalidadNacimiento": {
+                                                    "type": "string",
+                                                    "description": "Nombre de la localidad de nacimiento.",
+                                                    "maxLength": 45
+                                                },
+                                                "codigoProvincia": {
+                                                    "type": "string",
+                                                    "description": "Código de provincia de nacimiento.\nCampo obligatorio si el país Nacimiento es España (código 011)",
+                                                    "maxLength": 2
+                                                },
+                                                "nombreProvinciaNacimiento": {
+                                                    "type": "string",
+                                                    "description": "Nombre de la provincia de nacimiento.",
+                                                    "maxLength": 35
+                                                },
+                                                "sexo": {
+                                                    "type": "string",
+                                                    "description": "Sexo. \nM-Mujer\nH-Hombre\nD-Desconocido\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA",
+                                                    "enum": [
+                                                        "M",
+                                                        "H",
+                                                        "D"
+                                                    ],
+                                                    "maxLength": 1,
+                                                    "minLength": 1
+                                                },
+                                                "codigoEstadoCivil": {
+                                                    "type": "string",
+                                                    "description": "Código de estado civil dado de alta en la tabla de IRIS PGE-00032.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA\nValores:\n01 - SOLTERO/A\n02 - SEPARADO/A\n03 - DIVORCIADO/A\n04 - VIUDO/A\n05 - CASADO/A\n06 - UNION DE HECHO\n99 - DESCONOCIDO",
+                                                    "enum": [
+                                                        "01",
+                                                        "02",
+                                                        "03",
+                                                        "04",
+                                                        "05",
+                                                        "06",
+                                                        "99"
+                                                    ],
+                                                    "maxLength": 2,
+                                                    "minLength": 2
+                                                },
+                                                "miembrosUnidadFamiliar": {
+                                                    "type": "number",
+                                                    "format": "double",
+                                                    "description": "Número de componentes Unidad Familiar",
+                                                    "multipleOf": 1
+                                                },
+                                                "numeroHijos": {
+                                                    "type": "integer",
+                                                    "format": "int32",
+                                                    "description": "Número de hijos."
+                                                },
+                                                "codigoRegimenEconomico": {
+                                                    "type": "integer",
+                                                    "format": "int32",
+                                                    "description": "Código régimen económico dado de alta en la tabla  de IRIS-PGE-00033\nRégimen del matrimonio.\n1 - BIENES GANANCIALES\n2 - SEPARACIÓN DE BIENES\n3 - COMUNIDAD DE BIENES\n4 - REGIMEN ESPECIAL\n9 - DESCONOCIDO\nEste campo es obligatorio si el estado civil es 05.Casado"
+                                                },
+                                                "codigoCNO": {
+                                                    "type": "string",
+                                                    "description": "Código CNO dado de alta en la tabla de IRIS-POT-00022 Código Nacional De Ocupación.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA\nEn el caso de situación laboral distinta de 01, 02, el código CNO debe valer 999999",
+                                                    "maxLength": 6
+                                                },
+                                                "telefono": {
+                                                    "type": "string",
+                                                    "description": "Teléfono domicilio.",
+                                                    "maxLength": 20
+                                                },
+                                                "mail": {
+                                                    "type": "string",
+                                                    "description": "Correo electrónico de la dirección principal.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA",
+                                                    "maxLength": 50
+                                                }
+                                            }
+                                        },
+                                        "DatosDomicilio": {
+                                            "type": "object",
+                                            "description": "Datos domicilio de la persona",
+                                            "properties": {
+                                                "codigoProvinciaDomicilio": {
+                                                    "type": "string",
+                                                    "description": "Código de provincia del domicilio. \nEs Obligatorio si el código de país del domicilio es 011, España.",
+                                                    "maxLength": 2
+                                                },
+                                                "nombreProvinciaDomicilio": {
+                                                    "type": "string",
+                                                    "description": "Nombre de la provincia. \nSólo se podrá informar si el código de país del domicilio no es 011, España.",
+                                                    "maxLength": 35
+                                                },
+                                                "nombreLocalidad": {
+                                                    "type": "string",
+                                                    "description": "Nombre de la localidad del domicilio de la persona.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA.\nEn la operación MODIFICACION, si se informa este campo se deben informar obligatoriamente codigoDomicilioTipoVia y  nombreVia de DatosDomicilio y codigoPostal de DatosPersonales",
+                                                    "maxLength": 45
+                                                },
+                                                "codigoDomicilioTipoVia": {
+                                                    "type": "string",
+                                                    "description": "Código de via\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA.\nEn la operación MODIFICACION, si se informa este campo se deben informar obligatoriamente nombreVia y nombreLocalidad de DatosDomicilio y codigoPostal de DatosPersonales",
+                                                    "maxLength": 2
+                                                },
+                                                "nombreVia": {
+                                                    "type": "string",
+                                                    "description": "Nombre de via del domicilio de la persona\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA.\nEn la operación MODIFICACION, si se informa este campo se deben informar obligatoriamente codigoDomicilioTipoVia y nombreLocalidad de DatosDomicilio y codigoPostal de DatosPersonales",
+                                                    "maxLength": 45
+                                                },
+                                                "domicilioNumero": {
+                                                    "type": "string",
+                                                    "description": "Número del domicilio. Si se desconoce será S/N.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA",
+                                                    "maxLength": 4
+                                                },
+                                                "domicilioPortal": {
+                                                    "type": "string",
+                                                    "description": "Portal del domicilio.",
+                                                    "maxLength": 2
+                                                },
+                                                "domicilioEscalera": {
+                                                    "type": "string",
+                                                    "description": "Escalera del domicilio.               ",
+                                                    "maxLength": 2
+                                                },
+                                                "domicilioPlanta": {
+                                                    "type": "string",
+                                                    "description": "Planta del domicilio.",
+                                                    "maxLength": 3
+                                                },
+                                                "domicilioPuerta": {
+                                                    "type": "string",
+                                                    "description": "Puerta del domicilio.",
+                                                    "maxLength": 2
+                                                },
+                                                "codigoPaisResidencia": {
+                                                    "type": "string",
+                                                    "description": "Código de país de domicilio, dado de alta en la tabla de IRIS-Área Geográfica.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA",
+                                                    "maxLength": 3
+                                                },
+                                                "anioAdquisicion": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "description": "Año de adquisición de la propiedad.\nObligatorio, si regimenOcupacion tiene los siguientes valores:\n1-Propiedad sin hipoteca\n4-Propiedad hipotecada\nEn otro caso, NO informar."
+                                                },
+                                                "bloque": {
+                                                    "type": "string",
+                                                    "description": "Dato adicional información de domicilio: Bloque",
+                                                    "maxLength": 2
+                                                },
+                                                "fase": {
+                                                    "type": "string",
+                                                    "description": "Dato adicional información de domicilio: Fase",
+                                                    "maxLength": 3
+                                                },
+                                                "parcela": {
+                                                    "type": "string",
+                                                    "description": "Dato adicional información de domicilio: Parcela",
+                                                    "maxLength": 45
+                                                },
+                                                "otrosDatos": {
+                                                    "type": "string",
+                                                    "description": "Otros datos relacionados con el domicilio",
+                                                    "maxLength": 100
+                                                }
+                                            }
+                                        },
+                                        "DatosSocioEconomicos": {
+                                            "type": "object",
+                                            "description": "Datos socioeconómicos de la persona",
+                                            "properties": {
+                                                "regimenOcupacion": {
+                                                    "type": "string",
+                                                    "description": "Código de Régimen de Ocupación:\nLos posibles valores son:\n1.Propiedad sin hipoteca\n2.En alquiler\n3.Cedido\n4.Propiedad hipotecada\n5.Casa de padres\n6.Propiedad hipotecada (Cancela)\n9.Otros\nNOTA: el valor 6 es exclusivo de EVO, la TR SOA realizará esta validación internamente, no siendo posible este valor para entidad distinta de 0239 - EVO",
+                                                    "maxLength": 1,
+                                                    "minLength": 1
+                                                },
+                                                "codigoSituacionLaboral": {
+                                                    "type": "string",
+                                                    "description": "Código de situación laboral dado de alta en la tabla  de IRIS-PGE-00034 Estado Laboral.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA\n01 - TRABAJADOR POR CUENTA AJENA.\n02 - TRABAJADOR CUENTA PROPIA.\n03 - NO EMPLEADO. DEMANDA.\n04 - NO EMPLEADO. NO DEMANDA.\n05 - JUBILADO.\n06 - AMA DE CASA.\n07 - MENOR DE EDAD.\n08 - ESTUDIANTE.\n09 - SERVICIO MILITAR.\n10 - OTROS PASIVOS.\n11 - RENTISTA.\n12 - FUNCIONARIO.\n98 - TRABAJADOR POR CUENTA AJENA/TEMPORAL.\n99 - DESCONOCIDO.",
+                                                    "enum": [
+                                                        "01",
+                                                        "02",
+                                                        "03",
+                                                        "04",
+                                                        "05",
+                                                        "06",
+                                                        "07",
+                                                        "08",
+                                                        "09",
+                                                        "10",
+                                                        "11",
+                                                        "12",
+                                                        "98",
+                                                        "99"
+                                                    ],
+                                                    "maxLength": 2,
+                                                    "minLength": 2
+                                                },
+                                                "idioma": {
+                                                    "type": "string",
+                                                    "description": "Código del idioma.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA\n01 CASTELLANO\n02 CATALAN\n03 GALLEGO\n04 EUSKERA",
+                                                    "enum": [
+                                                        "01",
+                                                        "02",
+                                                        "03",
+                                                        "04"
+                                                    ],
+                                                    "maxLength": 2,
+                                                    "minLength": 2
+                                                },
+                                                "codigoRazonAltaPersona": {
+                                                    "type": "string",
+                                                    "description": "Código de razón de alta en la tabla de IRIS-PGE-00003 Razón de alta de la persona.\nCAMPO OBLIGATORIO PARA LA OPERACIÓN ALTA\n01 - PRODUCTO EN PARTICULAR\n02 - GESTIÓN DE EMPLEADO\n03 - RELACIÓN CON CLIENTE ACTUAL\n04 - CAMPAÑA PUBLICITARIA\n05 - IMAGEN DE LA ENTIDAD\n06 - PROXIMIDAD AL DOMICILIO\n07 - PROXIMIDAD AL TRABAJO\n08 - ESPONTÁNEO\n09 - INFORMACIÓN HISTÓRICA\n10 - EMISOR EXT.NÓMINAS\n11 - EMISOR EXT.RECIBOS DOMICILIO\n12 - EMISOR EXT.EFECTOS (LIBR-EXT)\n13 - ALTA RURALVÍA\n14 - ALTA MEDIOS DE PAGO\n15 - TEBE\n16 - PRÉSTAMO AUTOMÁTICO DE COMERCIO\n17 - ALTA DE PENSIONES\n18 - MICROINFORMÁTICA\n19 - POTENCIAL CRM\n20 - ALTA PROCESOS CONTRATACIÓN\n21 - EMISOR DE VALORES\n99 - OTROS",
+                                                    "enum": [
+                                                        "01",
+                                                        "02",
+                                                        "03",
+                                                        "04",
+                                                        "05",
+                                                        "06",
+                                                        "07",
+                                                        "08",
+                                                        "09",
+                                                        "10",
+                                                        "11",
+                                                        "12",
+                                                        "13",
+                                                        "14",
+                                                        "15",
+                                                        "16",
+                                                        "17",
+                                                        "18",
+                                                        "19",
+                                                        "20",
+                                                        "21",
+                                                        "23",
+                                                        "99"
+                                                    ],
+                                                    "maxLength": 2,
+                                                    "minLength": 2
+                                                },
+                                                "codigoCNAE": {
+                                                    "type": "string",
+                                                    "description": "Código CNAE dado de alta en la tabla de IRIS-POT-00015 C.N.A.E.\nEs obligatorio si codigoSituacionLaboral es igual a 02-Trabajador por Cuenta Propia.",
+                                                    "maxLength": 6
+                                                },
+                                                "fechaAltaAutonomo": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "description": "Fecha de alta de autónomo. Es obligatorio si se indica CNAE. \nSi se desconoce se pondrá valor = 1111-11-11.\nEs opcional salvo que codigoSituacionLaboral = 02 TRABAJADOR CUENTA PROPIA, entonces es obligatorio.\nTipo de dato fecha con formato YYYY-MM-DD"
+                                                },
+                                                "fechaAntiguedadLaboral": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "description": "Fecha de Antiguedad Laboral.\nTipo de dato fecha con formato YYYY-MM-DD"
+                                                },
+                                                "aniosGlobalesTrabajados": {
+                                                    "type": "number",
+                                                    "format": "double",
+                                                    "description": "Años globales trabajados",
+                                                    "multipleOf": 1
+                                                },
+                                                "cifEmpresa": {
+                                                    "type": "string",
+                                                    "description": "CIF de la empresa.",
+                                                    "minLength": 1,
+                                                    "maxLength": 14
+                                                },
+                                                "nombreEmpresa": {
+                                                    "type": "string",
+                                                    "description": "Nombre de la empresa.",
+                                                    "maxLength": 90
+                                                },
+                                                "telefonoEmpresa": {
+                                                    "type": "string",
+                                                    "description": "Telefono de la empresa.",
+                                                    "maxLength": 20
+                                                },
+                                                "cargo": {
+                                                    "type": "string",
+                                                    "description": " Cargo.                            ",
+                                                    "maxLength": 30
+                                                },
+                                                "fechaAntiguaCargo": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "description": "Fecha Ant. Cargo.\nTipo de dato fecha con formato YYYY-MM-DD"
+                                                },
+                                                "nivelSalarial": {
+                                                    "type": "integer",
+                                                    "format": "int32",
+                                                    "description": "Nivel salarial.\nTABLA TP_NIV_INGR_INDV IRIS-POT-00024              ",
+                                                    "maximum": 100,
+                                                    "exclusiveMaximum": true
+                                                },
+                                                "codigoContrato": {
+                                                    "type": "string",
+                                                    "description": "Código del tipo de contrato.\nValores posibles:\n01 ORDINARIO POR TIEMPO INDEFINIDO\n02 TEMPORAL DE FOMENTO DE EMPLEO\n03 A TIEMPO PARCIAL\n04 A TIEMPO PARCIAL PREST. SERV. INFERIOR A 12H/SEMANA\n05 A TIEMPO PARCIAL DE RELEVO\n06 EN PRACTICAS\n07 PARA LA FORMACION\n08 DE APRENDIZAJE\n09 SIN CONTRATO(DESEMPLEO, JUBILADO, ESTUDIANTE...)\n99 DESCONOCIDO",
+                                                    "enum": [
+                                                        "01",
+                                                        "02",
+                                                        "03",
+                                                        "04",
+                                                        "05",
+                                                        "06",
+                                                        "07",
+                                                        "08",
+                                                        "09",
+                                                        "99"
+                                                    ],
+                                                    "maxLength": 2,
+                                                    "minLength": 2
+                                                },
+                                                "fechaFinContrato": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "description": "Fecha Fin Contrato Temporal.\nTipo de dato fecha con formato YYYY-MM-DD. \nObligatoria si codigoContrato es 02 Temporal de fomento de empleo"
+                                                },
+                                                "duracion": {
+                                                    "type": "integer",
+                                                    "format": "int32",
+                                                    "description": "Duración.\nPosibles valores:\n1 Indefinido\n2 Temporal\nSi codigoContrato es 02 Temporal de fomento de empleo debe valer 2 - Temporal",
+                                                    "minimum": 1,
+                                                    "maximum": 2
+                                                },
+                                                "jornada": {
+                                                    "type": "integer",
+                                                    "format": "int32",
+                                                    "description": "Jornada.\nPosibles valores:\n1 Completo\n2 Parcial",
+                                                    "minimum": 1,
+                                                    "maximum": 2
+                                                },
+                                                "continuidad": {
+                                                    "type": "integer",
+                                                    "format": "int32",
+                                                    "description": "Continuidad.\nPosibles valores:\n1 Continuo\n2 Discontinuo",
+                                                    "minimum": 1,
+                                                    "maximum": 2
+                                                },
+                                                "dedicacion": {
+                                                    "type": "integer",
+                                                    "format": "int32",
+                                                    "description": "Dedicación.\nPosibles valores:\n1 Exclusiva\n2 No exclusiva",
+                                                    "minimum": 1,
+                                                    "maximum": 2
+                                                },
+                                                "tipoDeclaracion": {
+                                                    "type": "integer",
+                                                    "format": "int32",
+                                                    "description": "Tipo de declaración.\nPosibles valores:\n1 Estimación Directa\n2 Estimación Objetiva",
+                                                    "minimum": 1,
+                                                    "maximum": 2
+                                                },
+                                                "declaracionIVAUltimoEjercicio": {
+                                                    "type": "number",
+                                                    "format": "double",
+                                                    "description": "Declaración IVA último ejercicio.",
+                                                    "multipleOf": 0.01
+                                                },
+                                                "beneficioEjercicioAnterior": {
+                                                    "type": "number",
+                                                    "format": "double",
+                                                    "description": "Beneficio ejercicio anterior.",
+                                                    "multipleOf": 0.01
+                                                },
+                                                "beneficioEjercicioActual": {
+                                                    "type": "number",
+                                                    "format": "double",
+                                                    "description": "Beneficio ejercicio actual.",
+                                                    "multipleOf": 0.01
+                                                }
+                                            }
+                                        },
+                                        "OtrosDatosPersona": {
+                                            "type": "object",
+                                            "description": "Otros datos de la persona",
+                                            "properties": {
+                                                "indPubliPe": {
+                                                    "type": "string",
+                                                    "description": "Indicador de no Publicidad del cliente.\nValores:\nS Si quiere publicidad.\nN No quiere publicidad\nSi no se informa en el Alta el sistema informa a S por defecto.",
+                                                    "enum": [
+                                                        "S",
+                                                        "N"
+                                                    ],
+                                                    "maxLength": 1,
+                                                    "minLength": 1
+                                                },
+                                                "idPeInversis": {
+                                                    "type": "string",
+                                                    "description": "Representa el número de persona del cliente en Inversis.",
+                                                    "maxLength": 9
+                                                },
+                                                "indBloqueoNoCliente": {
+                                                    "type": "string",
+                                                    "description": "Indicador de bloqueo para no cliente.\nValores:\nS - No se enviará publicidad, ni se concede la cesión de datos a terceros, ni se permite realización de perfiles por empresas grupo y no grupo. \nN - No se quiere bloquear el envío de publicidad ni la cesión a terceros, ni la realización de perfiles, admitiendo que se bloquee cada campo por separado.\nSi no se informa en el Alta, este indicador quedará sin informar.\nValores:\nS - Si quiere bloquear RGPD. No se enviará publicidad, ni se concede la cesión de datos a terceros, ni se permite realización de perfiles por empresas grupo y no grupo.\nN - No se quiere bloquear el envío de publicidad ni la cesión a terceros, ni la cesión a terceros, admitiendo que se bloquee cada campo por separado.\nSi no se informa en el Alta, este indicador quedará sin informar.",
+                                                    "enum": [
+                                                        "S",
+                                                        "N"
+                                                    ],
+                                                    "maxLength": 1,
+                                                    "minLength": 1
+                                                },
+                                                "indNoCesiEmpGrupo": {
+                                                    "type": "string",
+                                                    "description": "Indicador de no cesión de datos a  empresas del grupo. \nValores:\nS - Si quiere bloquear la cesión de datos a empresas del grupo. \nN - Se admitirá la cesión de datos a empresas del grupo.\nSi no se informa en el Alta, este indicador quedará sin informar.\nNOTA: si la persona a dar de alta es un cliente, este campo es obligatorio.",
+                                                    "enum": [
+                                                        "S",
+                                                        "N"
+                                                    ],
+                                                    "maxLength": 1,
+                                                    "minLength": 1
+                                                },
+                                                "indNoPubliPostal": {
+                                                    "type": "string",
+                                                    "description": "Indicador de no enviar publicidad por correo postal. \nValores:\nS - Si quiere bloquear el envío de publicidad por correo postal.\nN - Se admitirá el envío de publicidad de correo postal.\nSi no se informa en el Alta, este indicador quedará sin informar.",
+                                                    "enum": [
+                                                        "S",
+                                                        "N"
+                                                    ],
+                                                    "maxLength": 1,
+                                                    "minLength": 1
+                                                },
+                                                "indNoPubliElect": {
+                                                    "type": "string",
+                                                    "description": "Indicador de no enviar publicidad por correo electrónico. \nValores:\nS - Si quiere bloquear el envío de publicidad por correo electrónico.\nN - Se admitirá el envío de publicidad por correo electrónico\nSi no se informa en el Alta, este indicador quedará sin informar.",
+                                                    "enum": [
+                                                        "S",
+                                                        "N"
+                                                    ],
+                                                    "maxLength": 1,
+                                                    "minLength": 1
+                                                },
+                                                "indNoPubliMovil": {
+                                                    "type": "string",
+                                                    "description": "Indicador de no enviar publicidad por mensajería móvil. \nValores:\nS - Si quiere bloquear el envío de publicidad por mensajería móvil.\nN - Se admitirá el envío de publicidad al teléfono móvil\nSi no se informa en el Alta, este indicador quedará sin informar.",
+                                                    "enum": [
+                                                        "S",
+                                                        "N"
+                                                    ],
+                                                    "maxLength": 1,
+                                                    "minLength": 1
+                                                },
+                                                "indNoPubliTelef": {
+                                                    "type": "string",
+                                                    "description": "Indicador de no enviar publicidad por teléfono por contact center. \nValores:\nS - Si quiere bloquear el envío de publicidad al teléfono.\nN - Se admitirá el envío de publicidad al teléfono\nSi no se informa en el Alta, este indicador quedará sin informar.",
+                                                    "enum": [
+                                                        "S",
+                                                        "N"
+                                                    ],
+                                                    "maxLength": 1,
+                                                    "minLength": 1
+                                                },
+                                                "indNoPubliBancaElec": {
+                                                    "type": "string",
+                                                    "description": "Indicador de no enviar publicidad por banca electrónica. \nValores:\nS - Si quiere bloquear el envío de publicidad a banca electrónica.\nN - Se admitirá el envío de publicidad a banca electrónica.\nSi no se informa en el Alta, este indicador quedará sin informar.",
+                                                    "enum": [
+                                                        "S",
+                                                        "N"
+                                                    ],
+                                                    "maxLength": 1,
+                                                    "minLength": 1
+                                                },
+                                                "indNoPubliBuzVirt": {
+                                                    "type": "string",
+                                                    "description": "Indicador de no enviar publicidad por buzón virtual. \nValores:\nS - Si quiere bloquear el envío de publicidad al buzón virtual.\nN - Se admitirá el envío de publicidad al buzón virtual.\nSi no se informa en el Alta, este indicador quedará sin informar.",
+                                                    "enum": [
+                                                        "S",
+                                                        "N"
+                                                    ],
+                                                    "maxLength": 1,
+                                                    "minLength": 1
+                                                },
+                                                "indNoPubliCajeAut": {
+                                                    "type": "string",
+                                                    "description": "Indicador de no enviar publicidad al cajero automático. \nValores:\nS - Si quiere bloquear el envío de publicidad al cajero automático.\nN - Se admitirá el envío de publicidad al cajero automático.\nSi no se informa en el Alta, este indicador quedará sin informar.",
+                                                    "enum": [
+                                                        "S",
+                                                        "N"
+                                                    ],
+                                                    "maxLength": 1,
+                                                    "minLength": 1
+                                                },
+                                                "indNoPubliOficina": {
+                                                    "type": "string",
+                                                    "description": "Indicador de no enviar publicidad desde oficina. Valores:\nS=Si quiere bloquear el envío de publicidad desde Oficina.\nDistinto de S, se admitirá el envío de publicidad desde Oficina.\nSi no se informa en el Alta, este indicador quedará sin informar.",
+                                                    "enum": [
+                                                        "S",
+                                                        "N"
+                                                    ],
+                                                    "maxLength": 1,
+                                                    "minLength": 1
+                                                },
+                                                "indListaRobinson": {
+                                                    "type": "string",
+                                                    "description": "Indicador de Lista Robinson. \nValores:\nS – Persona incluida dentro de la Lista Robinson. Los indicadores de Cesión y perfilados de datos externos recogerán el último valor informado por el cliente, no el que la Lista Robinson informa en el sistema.\nN - Persona no incluida dentro de la Lista Robinson.\nEl valor del campo sólo se puede modificar si la entidad lo permite.\nEn la Consulta si viene informado a ‘S’ los campos indNoCesiEmpGrupo, indNoCesionEmpNoGrupo e indPubliPe devolverán el último valor expresado por el cliente.\nSi no se informa en el Alta, este indicador quedará sin informar.",
+                                                    "enum": [
+                                                        "S",
+                                                        "N"
+                                                    ],
+                                                    "maxLength": 1,
+                                                    "minLength": 1
+                                                },
+                                                "indNoCesionEmpNoGrupo": {
+                                                    "type": "string",
+                                                    "description": "Indicador de no cesión de datos a Empresas No Grupo. \nValores:\nS - Si quiere bloquear la cesión de datos a Empresas No Grupo.\nN - Se admitirá la cesión de datos a Empresas No Grupo.\nSi no se informa en el Alta, este indicador quedará sin informar.\nNOTA: si la persona a dar de alta es un cliente, este campo es obligatorio.",
+                                                    "enum": [
+                                                        "S",
+                                                        "N"
+                                                    ],
+                                                    "maxLength": 1,
+                                                    "minLength": 1
+                                                },
+                                                "indPerfilPropPublic": {
+                                                    "type": "string",
+                                                    "description": "Indicador para elaborar perfiles propios/públicos:\nS – Persona que si permite utilizar la información para la realización de perfiles propios/públicos.\nN - Persona que no permite utilizar la información para la realización de perfiles propios/públicos.\nSi no se informa en el Alta el sistema informa a S por defecto.",
+                                                    "enum": [
+                                                        "S",
+                                                        "N"
+                                                    ],
+                                                    "maxLength": 1,
+                                                    "minLength": 1
+                                                },
+                                                "indPerfilDatExternos": {
+                                                    "type": "string",
+                                                    "description": "Indicador para elaborar perfiles con datos externos:\nS - Persona que si permite la realización de perfiles utilizando datos externos a la entidad.\nN - Persona que no permite la realización de perfiles utilizando datos externos a la entidad.\nSi no se informa en el Alta, este indicador quedará sin informar.\nNOTA: si la persona a dar de alta es un cliente, este campo es obligatorio.",
+                                                    "enum": [
+                                                        "S",
+                                                        "N"
+                                                    ],
+                                                    "maxLength": 1,
+                                                    "minLength": 1
+                                                }
+                                            }
+                                        },
+                                        "indTelPrincipalAlertas": {
+                                            "type": "string",
+                                            "description": "Indicador teléfono principal para alertas. Posibles valores de Respuesta:\nS SI,N NO\nSi se informa el campo teléfono móvil, este campo es obligatorio.",
+                                            "enum": [
+                                                "S",
+                                                "N"
+                                            ],
+                                            "maxLength": 1
+                                        },
+                                        "indComercioSeguro": {
+                                            "type": "string",
+                                            "description": "Indicador comercio seguro. Posibles valores de Respuesta:\nS SI,N NO\nSi se informa el campo teléfono móvil, este campo es obligatorio",
+                                            "enum": [
+                                                "S",
+                                                "N"
+                                            ],
+                                            "maxLength": 1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {
+                            "X-CorrelationId": {
+                                "type": "string",
+                                "description": "De interés a efectos de trazabilidad de la petición desde el sistema externo.",
+                                "x-example": "string"
+                            }
+                        },
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "EE_O_Modificacion"
+                            ],
+                            "properties": {
+                                "EE_O_Modificacion": {
+                                    "type": "object",
+                                    "description": "Estructura de la salida de la modificación de personas.",
+                                    "required": [
+                                        "codigoRetorno"
+                                    ],
+                                    "properties": {
+                                        "codigoRetorno": {
+                                            "type": "integer",
+                                            "format": "int32",
+                                            "description": "Si la respuesta es 1 ha ido bien, para el resto de valores implica error."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "headers": {
+                            "X-CorrelationId": {
+                                "type": "string",
+                                "description": "De interés a efectos de trazabilidad de la petición desde el sistema externo.",
+                                "x-example": "string"
+                            }
+                        },
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "EE_O_Modificacion"
+                            ],
+                            "properties": {
+                                "EE_O_Modificacion": {
+                                    "type": "object",
+                                    "description": "Estructura de la salida de la modificación de personas.",
+                                    "required": [
+                                        "codigoRetorno"
+                                    ],
+                                    "properties": {
+                                        "codigoRetorno": {
+                                            "type": "integer",
+                                            "format": "int32",
+                                            "description": "Si la respuesta es 1 ha ido bien, para el resto de valores implica error."
+                                        },
+                                        "Errores": {
+                                            "type": "object",
+                                            "format": "",
+                                            "description": "Salida estándar de errores.",
+                                            "required": [
+                                                "codigoMostrar",
+                                                "mensajeMostrar"
+                                            ],
+                                            "properties": {
+                                                "codigoMostrar": {
+                                                    "type": "string",
+                                                    "description": "Código del Error"
+                                                },
+                                                "mensajeMostrar": {
+                                                    "type": "string",
+                                                    "description": "Descripción del mensaje de Error"
+                                                },
+                                                "solucion": {
+                                                    "type": "string",
+                                                    "description": "Solución del error"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "headers": {
+                            "X-CorrelationId": {
+                                "type": "string",
+                                "description": "De interés a efectos de trazabilidad de la petición desde el sistema externo.",
+                                "x-example": "string"
+                            }
+                        },
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "EE_O_Modificacion"
+                            ],
+                            "properties": {
+                                "EE_O_Modificacion": {
+                                    "type": "object",
+                                    "description": "Estructura de la salida de la modificación de personas.",
+                                    "required": [
+                                        "codigoRetorno"
+                                    ],
+                                    "properties": {
+                                        "codigoRetorno": {
+                                            "type": "integer",
+                                            "format": "int32",
+                                            "description": "Si la respuesta es 1 ha ido bien, para el resto de valores implica error."
+                                        },
+                                        "Errores": {
+                                            "type": "object",
+                                            "format": "",
+                                            "description": "Salida estándar de errores.",
+                                            "required": [
+                                                "codigoMostrar",
+                                                "mensajeMostrar"
+                                            ],
+                                            "properties": {
+                                                "codigoMostrar": {
+                                                    "type": "string",
+                                                    "description": "Código del Error"
+                                                },
+                                                "mensajeMostrar": {
+                                                    "type": "string",
+                                                    "description": "Descripción del mensaje de Error"
+                                                },
+                                                "solucion": {
+                                                    "type": "string",
+                                                    "description": "Solución del error"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+}
